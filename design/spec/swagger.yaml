@@ -1,0 +1,129 @@
+---
+swagger: "2.0"
+info:
+  description: "Kube-checker checks your Kubernetes cluster and provides recommendations\
+    \ and best practices"
+  version: "1.0.0"
+  title: "kubechecker"
+  contact:
+    url: "https://infracloud.io"
+    email: "sanket@infracloud.io"
+host: "10.10.10.10:8091"
+basePath: "/"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /v1/scan:
+    post:
+      description: "Create a scan job and collect Job info.\n"
+      operationId: "AddJob"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "A successful response will contain list of the AZs in the\
+            \ configured region"
+          schema:
+            $ref: "#/definitions/V1.Job"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal Error"
+  /v1/job_status/{job_id}:
+    get:
+      description: "Get Report\n"
+      operationId: "GetJobStatus"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "job_id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "A successful response will report with recommendations"
+          schema:
+            $ref: "#/definitions/V1.Job"
+  /v1/report/{report_id}:
+    get:
+      description: "Get Report\n"
+      operationId: "GetReport"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "report_id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "A successful response will report with recommendations"
+          schema:
+            $ref: "#/definitions/V1.Report"
+    delete:
+      description: "Delete report\n"
+      operationId: "DeleteReport"
+      parameters:
+      - name: "report_id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Delete report"
+definitions:
+  V1.Job:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Job id"
+      state:
+        type: "string"
+        description: "Job state"
+        enum:
+        - "starting"
+        - "running"
+        - "succeded"
+        - "aborted"
+        - "failed"
+      report_id:
+        type: "string"
+        description: "Report id if job succeded"
+    example:
+      report_id: "report_id"
+      id: "id"
+      state: "starting"
+  V1.Report:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Report id"
+      recommendations:
+        $ref: "#/definitions/V1.RecommendationList"
+    example:
+      id: "id"
+      recommendations: ""
+  V1.Recommendation:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the recommendation"
+      info:
+        type: "string"
+        description: "Info about recommendation"
+    example:
+      name: "ResourceLimitMissing"
+      info: "Please specify pod limits"
+  V1.RecommendationList:
+    type: "array"
+    items:
+      $ref: "#/definitions/V1.Recommendation"
