@@ -11,15 +11,31 @@ OS?=$(shell uname -s | tr A-Z a-z)
 GIT_VERSION?=$(shell git describe --tags --dirty)
 CERT_DIR?=/tmp/kube-checker
 
+KUBE_CHECKER_API?=kube-checker-api
+KUBE_CHECKER_UI?=kube-checker-ui
+KUBE_CHECKER_JOB?=kube-checker-job
+
 .PHONY: all binary clean help ssl-keys
 default: help
 
 ## Make all targets
-all: dist/kube-checker-linux-$(ARCH)
+all: cmds
 
-## Generate binary and run API Server
-run: dist/kube-checker-linux-$(ARCH) ssl-keys
-	./dist/kube-checker-$(OS)-$(ARCH) --tls-certificate $(CERT_DIR)/dev.crt --tls-key $(CERT_DIR)/dev.key
+## Generate all cmds
+cmds: $(KUBE_CHECKER_API) $(KUBE_CHECKER_UI) $(KUBE_CHECKER_JOB)
+
+$(KUBE_CHECKER_API):
+	$(MAKE) OS=$(OS) ARCH=$(ARCH) BINARY=$(KUBE_CHECKER_API) binary
+
+$(KUBE_CHECKER_JOB):
+	$(MAKE) OS=$(OS) ARCH=$(ARCH) BINARY=$(KUBE_CHECKER_JOB) binary
+
+$(KUBE_CHECKER_UI):
+	$(MAKE) OS=$(OS) ARCH=$(ARCH) BINARY=$(KUBE_CHECKER_UI) binary
+
+## Run API Server
+run-api-server: $(KUBE_CHECKER_API) ssl-keys
+	./dist/$(KUBE_CHECKER_API)-$(OS)-$(ARCH) --tls-certificate $(CERT_DIR)/dev.crt --tls-key $(CERT_DIR)/dev.key
 
 ssl-keys:
 	mkdir -p $(CERT_DIR)
@@ -27,12 +43,9 @@ ssl-keys:
 		-keyout $(CERT_DIR)/dev.key -out $(CERT_DIR)/dev.crt \
 		-subj "/C=IN/ST=MH/L=Pune/CN=kubechecker.com/emailAddress=sanket@infracloud.com"
 
-dist/kube-checker-linux-$(ARCH):
-	$(MAKE) OS=linux ARCH=$(ARCH) binary
-
 binary:
-	GOOS=$(OS) GOARCH=$(ARCH) CGO_ENABLED=0 go build -v $$INSTALL_FLAG -o dist/kube-checker-$(OS)-$(ARCH) \
-	-ldflags "-X main.VERSION=$(GIT_VERSION)" ./main.go
+	GOOS=$(OS) GOARCH=$(ARCH) CGO_ENABLED=0 go build -o dist/$(BINARY)-$(OS)-$(ARCH) \
+	-ldflags "-X main.VERSION=$(GIT_VERSION)" cmd/$(BINARY)/main.go
 
 ## Generate swagger code
 swagger-codegen:
