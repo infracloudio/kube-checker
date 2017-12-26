@@ -1,0 +1,27 @@
+package: github.com/infracloudio/kube-checker
+import:
+- package: github.com/go-openapi/analysis
+  version: master
+- package: github.com/go-openapi/errors
+  version: master
+- package: github.com/go-openapi/loads
+  version: master
+- package: github.com/go-openapi/runtime
+  version: master
+- package: github.com/go-openapi/spec
+  version: master
+- package: github.com/go-openapi/strfmt
+  version: master
+- package: github.com/go-openapi/swag
+  version: master
+- package: github.com/go-openapi/validate
+  version: master
+- package: github.com/jessevdk/go-flags
+  version: 1.3.0
+- package: github.com/tylerb/graceful
+  version: 1.2.15
+- package: k8s.io/client-go
+  version: v6.0.0
+  subpackages:
+  - kubernetes
+  - tools/clientcmd

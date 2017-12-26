@@ -12,4 +12,4 @@
 
 # Project specific ignores
 vendor/
-kube-checker
+dist/
