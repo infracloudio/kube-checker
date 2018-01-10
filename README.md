@@ -18,7 +18,7 @@ Following is list of tools that Kube-checker will integrate with to get informat
 |--------|--------------------------------|
 | [Klint](https://github.com/uswitch/klint)|Klint runs a linting rules against Kubernetes resources|
 |[Node-problem-detector](https://github.com/kubernetes/node-problem-detector)|Node problem detector specifically focuses on problems at Node level and makes them visible upstream|
-|Kube-bench|Runs CIS Kubernetes benchmarks on a cluster|
+|[Kube-bench](https://github.com/aquasecurity/kube-bench)|Runs CIS Kubernetes benchmarks on a cluster|
 
 ## Rules/Playbooks
 
