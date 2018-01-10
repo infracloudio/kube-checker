@@ -50,7 +50,7 @@ binary:
 ## Generate swagger code
 swagger-codegen:
 	swagger generate server -f design/spec/swagger.yaml -t ./pkg/
-	mv pkg/cmd/kubechecker-server/main.go .
+	mv pkg/cmd/kubechecker-server/main.go cmd/$(KUBE_CHECKER_API)/
 	rm -r pkg/cmd
 
 ## Cleanup all build files
