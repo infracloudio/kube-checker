@@ -1,12 +1,12 @@
 # kube-checker
 
-Kube-checker extracts information of a running Kubernetes cluster to make debugging faster ane enabling support teams.
+Kube-checker extracts relevant information from a running Kubernetes cluster to make debugging faster.
 
 # Motivation
 
 Debugging issues in a running Kubernetes cluster can become complex. Many of the issues can not be caught by existing logging/monitoring tools and technologies. Kube-checker codifies frequently used playbooks and provides the information at your fingertips so the resolution is faster.
 
-There are some tools that exist but they solve a specific area only ATM. Kube-checker integrates will existing tools and fills gaps in areas where no tooling exist.
+There are some tools that exist but they solve a specific area only ATM. Kube-checker integrates with existing tools and fills gaps in areas where no tooling exist.
 
 # Details
 
